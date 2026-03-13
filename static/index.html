@@ -252,6 +252,30 @@ body {
 /* ── MISC ── */
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 input[type=number]{-moz-appearance:textfield;}
+/* ── RULES TAB ── */
+.rules-section{margin-bottom:8px;}
+.rules-details{background:var(--bg2);border:1px solid var(--border-g);border-radius:4px;overflow:hidden;}
+.rules-details[open]{border-color:var(--gold-d);}
+.rules-summary{font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;padding:12px 14px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;-webkit-appearance:none;}
+.rules-summary::-webkit-details-marker{display:none;}
+.rules-summary::after{content:'▾';font-size:.8rem;color:var(--gold-d);transition:transform .2s;}
+.rules-details[open] .rules-summary::after{transform:rotate(-180deg);}
+.rules-body{padding:10px 14px 14px;border-top:1px solid var(--border-g);}
+.rules-entry{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.rules-entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.rules-entry-name{font-family:'Cinzel',serif;font-size:.75rem;font-weight:600;color:var(--ink);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+.rules-entry-desc{font-size:.85rem;color:var(--text-d);line-height:1.5;}
+.rules-pill{display:inline-block;background:rgba(201,168,76,.12);border:1px solid var(--gold-d);border-radius:10px;font-family:'Cinzel',serif;font-size:.55rem;color:var(--gold-d);padding:1px 7px;vertical-align:middle;letter-spacing:.05em;}
+.rules-pill.red{background:rgba(139,26,26,.2);border-color:var(--red-b);color:#e8a0a0;}
+.rules-pill.blue{background:rgba(26,42,74,.3);border-color:var(--blue-b);color:#a8c8e8;}
+.rules-pill.green{background:rgba(26,74,42,.3);border-color:var(--green-b);color:#88d8a0;}
+.rules-pill.purple{background:rgba(74,26,106,.3);border-color:var(--purple-b);color:#c8a8e8;}
+.rules-ability-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;}
+.rules-ability-card{background:var(--bg);border:1px solid var(--border-g);border-radius:4px;padding:10px;}
+.rules-ability-card .rac-name{font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
+.rules-ability-card .rac-desc{font-size:.78rem;color:var(--text-d);line-height:1.4;margin-bottom:5px;}
+.rules-ability-card .rac-skills{font-size:.72rem;color:var(--text-d);}
+.rules-ability-card .rac-skills span{color:var(--gold-d);font-style:italic;}
 </style>
 </head>
 <body>
@@ -695,6 +719,170 @@ input[type=number]{-moz-appearance:textfield;}
       <textarea class="notes-area" id="notes-area" placeholder="Session notes, reminders, misc…" oninput="fieldUpdate('notes',this.value)"></textarea>
     </div>
 
+    <!-- ── TAB: RULES ── -->
+    <div id="tab-rules" class="tab-content">
+
+      <div class="section-title">Out of Combat</div>
+
+      <!-- Ability Scores -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Ability Scores</summary>
+          <div class="rules-body">
+            <div class="rules-entry-desc" style="margin-bottom:10px;">Every creature has six ability scores. Each has a <strong>modifier</strong> = (score − 10) ÷ 2, rounded down. Your modifier is what you add to dice rolls.</div>
+            <div class="rules-ability-grid">
+              <div class="rules-ability-card">
+                <div class="rac-name">STR — Strength</div>
+                <div class="rac-desc">Raw physical power. Melee attacks, carrying &amp; lifting, breaking things.</div>
+                <div class="rac-skills">Skills: <span>Athletics</span></div>
+              </div>
+              <div class="rules-ability-card">
+                <div class="rac-name">DEX — Dexterity</div>
+                <div class="rac-desc">Agility &amp; reflexes. Ranged attacks, AC (light/no armor), initiative, finesse weapons.</div>
+                <div class="rac-skills">Skills: <span>Acrobatics, Sleight of Hand, Stealth</span></div>
+              </div>
+              <div class="rules-ability-card">
+                <div class="rac-name">CON — Constitution</div>
+                <div class="rac-desc">Endurance &amp; toughness. Hit point calculations, concentration checks.</div>
+                <div class="rac-skills">No associated skills.</div>
+              </div>
+              <div class="rules-ability-card">
+                <div class="rac-name">INT — Intelligence</div>
+                <div class="rac-desc">Memory &amp; reasoning. Wizard spellcasting. Identifying spells and creatures.</div>
+                <div class="rac-skills">Skills: <span>Arcana, History, Investigation, Nature, Religion</span></div>
+              </div>
+              <div class="rules-ability-card">
+                <div class="rac-name">WIS — Wisdom</div>
+                <div class="rac-desc">Perception &amp; willpower. Cleric, Druid, Ranger spellcasting. Noticing the world.</div>
+                <div class="rac-skills">Skills: <span>Animal Handling, Insight, Medicine, Perception, Survival</span></div>
+              </div>
+              <div class="rules-ability-card">
+                <div class="rac-name">CHA — Charisma</div>
+                <div class="rac-desc">Force of personality. Bard, Paladin, Sorcerer, Warlock spellcasting. Social influence.</div>
+                <div class="rac-skills">Skills: <span>Deception, Intimidation, Performance, Persuasion</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Skills -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Skills Reference</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Acrobatics <span class="rules-pill">DEX</span></div><div class="rules-entry-desc">Tumbling, balancing, escaping grapples, and staying on your feet in tricky situations.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Animal Handling <span class="rules-pill">WIS</span></div><div class="rules-entry-desc">Calming, directing, controlling, or reading the intentions of animals.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Arcana <span class="rules-pill">INT</span></div><div class="rules-entry-desc">Recalling lore about spells, magic items, symbols, magical traditions, and planar beings.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Athletics <span class="rules-pill">STR</span></div><div class="rules-entry-desc">Climbing, jumping, and swimming in difficult conditions. Grappling and shoving.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Deception <span class="rules-pill">CHA</span></div><div class="rules-entry-desc">Convincingly lying, disguising intent, misleading others with false statements or actions.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">History <span class="rules-pill">INT</span></div><div class="rules-entry-desc">Recalling lore about historical events, legendary people, ancient kingdoms, past disputes.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Insight <span class="rules-pill">WIS</span></div><div class="rules-entry-desc">Reading a creature's true intentions, detecting lies, sensing emotions behind words.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Intimidation <span class="rules-pill">CHA</span></div><div class="rules-entry-desc">Influencing others through threats, hostile actions, or a menacing physical presence.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Investigation <span class="rules-pill">INT</span></div><div class="rules-entry-desc">Searching for clues, deducing from evidence, finding hidden objects or weak points.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Medicine <span class="rules-pill">WIS</span></div><div class="rules-entry-desc">Diagnosing illnesses, stabilizing a dying creature, predicting how a disease will progress.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Nature <span class="rules-pill">INT</span></div><div class="rules-entry-desc">Recalling lore about terrain, plants, animals, weather, and natural cycles.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Perception <span class="rules-pill">WIS</span></div><div class="rules-entry-desc">Noticing things in your environment using sight, hearing, or other senses. The most used skill!</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Performance <span class="rules-pill">CHA</span></div><div class="rules-entry-desc">Entertaining an audience through music, dance, acting, storytelling, or another art form.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Persuasion <span class="rules-pill">CHA</span></div><div class="rules-entry-desc">Influencing someone through tact, charm, flattery, or reasoned argument.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Religion <span class="rules-pill">INT</span></div><div class="rules-entry-desc">Recalling lore about deities, rites, prayers, religious hierarchies, and holy symbols.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Sleight of Hand <span class="rules-pill">DEX</span></div><div class="rules-entry-desc">Pickpocketing, palming objects, planting items on others, and manual trickery.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Stealth <span class="rules-pill">DEX</span></div><div class="rules-entry-desc">Moving silently, staying in shadows, hiding from creatures that haven't noticed you.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Survival <span class="rules-pill">WIS</span></div><div class="rules-entry-desc">Tracking creatures, foraging for food, navigating wilderness, predicting weather.</div></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Movement Out of Combat -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Movement &amp; Exploration</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Walking</div><div class="rules-entry-desc">Normal travel pace. Fast pace = better distance, −5 to Perception. Slow pace = worse distance, can Stealth.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Climbing</div><div class="rules-entry-desc">Costs 2 ft of movement per 1 ft climbed unless you have a climb speed. Difficult surfaces may require an Athletics check.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Swimming</div><div class="rules-entry-desc">Costs 2 ft per 1 ft unless you have a swim speed. Rough or stormy water may require an Athletics check.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Long Jump</div><div class="rules-entry-desc">Running (10+ ft): leap up to your STR score in feet. Standing: half that. Requires Athletics check to clear low obstacles.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">High Jump</div><div class="rules-entry-desc">Running (10+ ft): reach up to 3 + your STR modifier in feet. Standing: half that.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Difficult Terrain</div><div class="rules-entry-desc">Every 1 ft traveled in difficult terrain costs 2 ft of movement. Examples: thick mud, rubble, deep snow, shallow water.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Dropping Prone</div><div class="rules-entry-desc">Free action. While prone: crawling costs 2 ft per 1 ft. Standing up costs half your movement.</div></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Resting -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Resting</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Short Rest <span class="rules-pill blue">1 Hour</span></div><div class="rules-entry-desc">Spend one or more Hit Dice to recover HP. Some class features (e.g. Warlock spell slots, Fighter's Action Surge) also refresh on a short rest.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Long Rest <span class="rules-pill green">8 Hours</span></div><div class="rules-entry-desc">Recover all HP and half your total Hit Dice. Most class features and all spell slots refresh. Can only benefit once per 24 hours.</div></div>
+          </div>
+        </details>
+      </div>
+
+      <div class="section-title">Combat</div>
+
+      <!-- Action Economy -->
+      <div class="rules-section">
+        <details class="rules-details" open>
+          <summary class="rules-summary">Action Economy</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Action <span class="rules-pill red">1 per turn</span></div><div class="rules-entry-desc">Your main thing each turn. Attack, cast a spell, dash, dodge, help, hide, ready, search, use an object, grapple, shove, or anything else the DM allows.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Bonus Action <span class="rules-pill red">1 per turn</span></div><div class="rules-entry-desc">Only usable if a feature, spell, or ability gives you one. You can't spend a bonus action unless something specifically lets you. Examples: off-hand attack, Cunning Action (Rogue), healing word.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Reaction <span class="rules-pill purple">1 per round</span></div><div class="rules-entry-desc">Used in response to a specific trigger, even on someone else's turn. Resets at the start of your turn. Examples: opportunity attack, Counterspell, Shield spell, Uncanny Dodge.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Movement <span class="rules-pill">Up to Speed</span></div><div class="rules-entry-desc">Move up to your speed in feet per turn. You can split movement before, after, or between your actions. Moving through difficult terrain costs 2 ft per 1 ft.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Free Action / Object Interaction</div><div class="rules-entry-desc">Brief, simple tasks — speaking a few words, dropping something, drawing a weapon. You get one free object interaction per turn. Extra ones cost your Action.</div></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Common Actions -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Common Actions in Combat</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Attack</div><div class="rules-entry-desc">Make one weapon attack (or unarmed strike). Some features give extra attacks. Roll to hit: d20 + ability mod + proficiency (if proficient) vs. target AC.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Cast a Spell</div><div class="rules-entry-desc">Cast a spell with a casting time of 1 Action. Spells with a bonus action casting time use your Bonus Action instead.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Dash</div><div class="rules-entry-desc">Gain extra movement equal to your speed this turn (effectively doubling your movement).</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Disengage</div><div class="rules-entry-desc">Your movement doesn't provoke opportunity attacks for the rest of your turn.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Dodge</div><div class="rules-entry-desc">Until your next turn: attackers have disadvantage on attacks against you, and you have advantage on DEX saving throws. Only works if you can see the attacker and aren't incapacitated.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Help</div><div class="rules-entry-desc">Give an ally advantage on their next ability check, OR give an ally advantage on their next attack roll against a creature within 5 ft of you.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Hide</div><div class="rules-entry-desc">Make a Stealth (DEX) check. If successful and conditions allow (heavily obscured or behind cover), you become hidden.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Ready</div><div class="rules-entry-desc">Choose a trigger ("when the enemy steps through the door…") and an action to take as a Reaction when that trigger occurs.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Search</div><div class="rules-entry-desc">Make a Perception or Investigation check to locate something not immediately obvious.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Grapple</div><div class="rules-entry-desc">Athletics check vs. target's Athletics or Acrobatics (their choice). On success: target is grappled (speed = 0). You can drag them at half speed. Ends if you're incapacitated or move out of reach.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Shove</div><div class="rules-entry-desc">Athletics check vs. target's Athletics or Acrobatics. On success: push them 5 ft away OR knock them prone (your choice).</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Opportunity Attack</div><div class="rules-entry-desc"><strong>Reaction.</strong> When a creature you can see leaves your melee reach without Disengaging, you can make one melee attack against them.</div></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Conditions -->
+      <div class="rules-section">
+        <details class="rules-details">
+          <summary class="rules-summary">Conditions</summary>
+          <div class="rules-body">
+            <div class="rules-entry"><div class="rules-entry-name">Blinded</div><div class="rules-entry-desc">Auto-fails any check requiring sight. Attack rolls against you have advantage; your attack rolls have disadvantage.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Charmed</div><div class="rules-entry-desc">Can't attack the charmer or target them with harmful effects. The charmer has advantage on Charisma checks against you.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Deafened</div><div class="rules-entry-desc">Can't hear. Auto-fails ability checks that require hearing.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Exhaustion <span class="rules-pill red">Stacking</span></div><div class="rules-entry-desc">Level 1: Disadvantage on ability checks. Level 2: Speed halved. Level 3: Disadvantage on attacks &amp; saves. Level 4: Max HP halved. Level 5: Speed = 0. Level 6: Death.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Frightened</div><div class="rules-entry-desc">Disadvantage on ability checks and attacks while the source of fear is in line of sight. Can't willingly move closer to it.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Grappled</div><div class="rules-entry-desc">Speed becomes 0 and can't be increased. Ends if grappler is incapacitated, or if the target is moved outside the grappler's reach.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Incapacitated</div><div class="rules-entry-desc">Can't take Actions or Reactions.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Invisible</div><div class="rules-entry-desc">Can't be seen without magic or special senses. Attacks against you have disadvantage; your attacks have advantage.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Paralyzed</div><div class="rules-entry-desc">Incapacitated, can't move or speak. Auto-fails STR and DEX saves. Attacks have advantage; hits within 5 ft are critical hits.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Petrified</div><div class="rules-entry-desc">Turned to stone. Incapacitated, can't move or speak. Weight increases tenfold. Resistant to all damage; immune to poison and disease. Auto-fails STR and DEX saves; attacks have advantage.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Poisoned</div><div class="rules-entry-desc">Disadvantage on attack rolls and ability checks.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Prone</div><div class="rules-entry-desc">Can only crawl (costs 2 ft per 1 ft). Your attacks have disadvantage. Melee attacks against you have advantage; ranged attacks have disadvantage. Standing up costs half your movement.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Restrained</div><div class="rules-entry-desc">Speed becomes 0. Attack rolls against you have advantage; your attack rolls have disadvantage. Disadvantage on DEX saving throws.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Stunned</div><div class="rules-entry-desc">Incapacitated, can't move, can speak only falteringly. Auto-fails STR and DEX saves. Attacks have advantage.</div></div>
+            <div class="rules-entry"><div class="rules-entry-name">Unconscious</div><div class="rules-entry-desc">Incapacitated, can't move or speak. Drops held items and falls prone. Auto-fails STR and DEX saves. Attacks have advantage; hits within 5 ft are critical hits.</div></div>
+          </div>
+        </details>
+      </div>
+
+    </div><!-- /tab-rules -->
+
   </div><!-- /sheet-content -->
 
   <!-- Tab Bar -->
@@ -703,7 +891,8 @@ input[type=number]{-moz-appearance:textfield;}
     <button class="tab-btn" onclick="switchTab('stats',this)"><span class="ti">💪</span>Stats</button>
     <button class="tab-btn" onclick="switchTab('spells',this)"><span class="ti">✨</span>Spells</button>
     <button class="tab-btn" onclick="switchTab('inventory',this)"><span class="ti">🎒</span>Gear</button>
-    <button class="tab-btn" onclick="switchTab('features',this)"><span class="ti">📜</span>Features</button>
+    <button class="tab-btn" onclick="switchTab('features',this)"><span class="ti">📜</span>Notes</button>
+    <button class="tab-btn" onclick="switchTab('rules',this)"><span class="ti">📖</span>Rules</button>
   </div>
 </div><!-- /screen-sheet -->
 
