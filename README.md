@@ -48,6 +48,9 @@ python -m pytest
 - **Spells Tab** — Spell slot tracking (tap pips to use/recover), full spellbook with prepared toggle
 - **Gear Tab** — Inventory with quantity tracking, currency (PP/GP/EP/SP/CP)
 - **Notes Tab** — Class features/traits, free-text notes
+- **Rules Tab** — New player cheat sheet split into two sections:
+  - *Out of Combat* — All 18 skills with descriptions, ability score explanations, movement mechanics (walk, run, jump, climb, swim), and status conditions
+  - *Combat* — Action economy (Action, Bonus Action, Reaction, Free Action), common actions (Attack, Dash, Dodge, Help, Hide, Ready, Use Object), and combat status conditions
 
 ## Data
 
