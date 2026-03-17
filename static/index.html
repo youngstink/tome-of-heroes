@@ -799,7 +799,8 @@ input[type=number]{-moz-appearance:textfield;}
       <div id="spell-list"></div>
       <div class="add-form">
         <div class="add-form-label">Add Spell</div>
-        <input type="text" id="new-spell-name" placeholder="Spell Name">
+        <datalist id="spell-suggestions"></datalist>
+        <input type="text" id="new-spell-name" placeholder="Spell Name" list="spell-suggestions" oninput="autofillSpell(this.value)">
         <div class="add-form-row">
           <select id="new-spell-level">
             <option value="0">Cantrip</option><option value="1">1st Level</option><option value="2">2nd Level</option>
@@ -810,6 +811,14 @@ input[type=number]{-moz-appearance:textfield;}
         </div>
         <input type="text" id="new-spell-cast" placeholder="Casting Time">
         <input type="text" id="new-spell-range" placeholder="Range">
+        <div class="add-form-row">
+          <input type="text" id="new-spell-components" placeholder="Components (V, S, M)">
+          <input type="text" id="new-spell-duration" placeholder="Duration">
+        </div>
+        <div class="add-form-row" style="gap:16px;font-size:.85rem;color:var(--text-d);">
+          <label><input type="checkbox" id="new-spell-concentration"> Concentration</label>
+          <label><input type="checkbox" id="new-spell-ritual"> Ritual</label>
+        </div>
         <button class="add-btn" onclick="addSpell()">Add Spell</button>
       </div>
     </div>
@@ -1119,6 +1128,31 @@ async function loadGameData(edition){
     gameDataCache[edition]=await r.json();
   }catch(e){gameDataCache[edition]={races:[],classes:[],backgrounds:[],spells:[]};}
   return gameDataCache[edition];
+}
+
+function populateSpellDatalist(edition){
+  const data=gameDataCache[edition];
+  if(!data||!data.spells) return;
+  const dl=document.getElementById('spell-suggestions');
+  if(!dl) return;
+  dl.innerHTML=data.spells.map(sp=>`<option value="${sp.name}">`).join('');
+}
+
+function autofillSpell(name){
+  if(!currentChar) return;
+  const edition=currentChar.edition||'2024';
+  const data=gameDataCache[edition];
+  if(!data||!data.spells) return;
+  const sp=data.spells.find(s=>s.name.toLowerCase()===name.toLowerCase());
+  if(!sp) return;
+  document.getElementById('new-spell-level').value=sp.level||0;
+  document.getElementById('new-spell-school').value=sp.school||'';
+  document.getElementById('new-spell-cast').value=sp.casting_time||'';
+  document.getElementById('new-spell-range').value=sp.range||'';
+  document.getElementById('new-spell-components').value=sp.components||'';
+  document.getElementById('new-spell-duration').value=sp.duration||'';
+  document.getElementById('new-spell-concentration').checked=!!(sp.concentration);
+  document.getElementById('new-spell-ritual').checked=!!(sp.ritual);
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1453,6 +1487,7 @@ async function loadCharacter(id){
   document.getElementById('screen-sheet').classList.add('active');
   // Load game data for this edition (for class features)
   gameData=await loadGameData(currentChar.edition||'2024');
+  populateSpellDatalist(currentChar.edition||'2024');
   renderSheet();
   switchTab('main',document.querySelector('.tab-btn'));
 }
@@ -1610,10 +1645,12 @@ function renderSpellList(){
   container.innerHTML=[...spells].sort((a,b)=>a.level-b.level).map((sp,i)=>{
     const origIdx=currentChar.spells.indexOf(sp);
     const levelStr=sp.level==0?'Cantrip':ORDINALS[sp.level]+' level';
-    const meta=[levelStr,sp.school,sp.casting_time,sp.range].filter(Boolean).join(' · ');
+    const meta=[levelStr,sp.school,sp.casting_time,sp.range,sp.duration].filter(Boolean).join(' · ');
+    const badges=(sp.concentration?'<span style="font-size:.7rem;background:var(--accent2);color:#fff;border-radius:3px;padding:1px 4px;margin-left:4px;">C</span>':'')
+               +(sp.ritual?'<span style="font-size:.7rem;background:var(--text-d);color:#fff;border-radius:3px;padding:1px 4px;margin-left:4px;">R</span>':'');
     return `<div class="spell-entry">
       <button class="spell-prepared-toggle ${sp.prepared?'prepared':''}" onclick="toggleSpellPrepared(${origIdx})">✓</button>
-      <div style="flex:1;"><div class="spell-name">${sp.name}</div><div class="spell-meta">${meta}</div></div>
+      <div style="flex:1;"><div class="spell-name">${sp.name}${badges}</div><div class="spell-meta">${meta}${sp.components?' · '+sp.components:''}</div></div>
       <button class="spell-del" onclick="removeSpell(${origIdx})">✕</button>
     </div>`;
   }).join('');
@@ -1814,9 +1851,22 @@ function addSpell(){
   const name=document.getElementById('new-spell-name').value.trim();
   if(!name) return;
   if(!currentChar.spells) currentChar.spells=[];
-  currentChar.spells.push({name,level:+document.getElementById('new-spell-level').value,school:document.getElementById('new-spell-school').value.trim(),casting_time:document.getElementById('new-spell-cast').value.trim(),range:document.getElementById('new-spell-range').value.trim(),prepared:false});
-  ['new-spell-name','new-spell-school','new-spell-cast','new-spell-range'].forEach(id=>document.getElementById(id).value='');
+  currentChar.spells.push({
+    name,
+    level:+document.getElementById('new-spell-level').value,
+    school:document.getElementById('new-spell-school').value.trim(),
+    casting_time:document.getElementById('new-spell-cast').value.trim(),
+    range:document.getElementById('new-spell-range').value.trim(),
+    components:document.getElementById('new-spell-components').value.trim(),
+    duration:document.getElementById('new-spell-duration').value.trim(),
+    concentration:document.getElementById('new-spell-concentration').checked,
+    ritual:document.getElementById('new-spell-ritual').checked,
+    prepared:false
+  });
+  ['new-spell-name','new-spell-school','new-spell-cast','new-spell-range','new-spell-components','new-spell-duration'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('new-spell-level').value='0';
+  document.getElementById('new-spell-concentration').checked=false;
+  document.getElementById('new-spell-ritual').checked=false;
   renderSpellList(); scheduleSave();
 }
 function toggleSpellPrepared(idx){currentChar.spells[idx].prepared=!currentChar.spells[idx].prepared;renderSpellList();scheduleSave();}

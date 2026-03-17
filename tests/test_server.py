@@ -314,6 +314,156 @@ class TestGameData:
         r = client.get("/api/game-data").get_json()
         assert r["races"][0]["name"] == "Elf"
 
+    def test_spells_returned_with_full_fields(self, client):
+        spell = {
+            "name": "Fireball", "level": 3, "school": "Evocation",
+            "casting_time": "1 action", "range": "150 feet",
+            "components": "VSM", "duration": "Instantaneous",
+            "concentration": False, "ritual": False,
+            "classes": ["Wizard", "Sorcerer"], "desc": "A bright streak...",
+        }
+        game_data = {"2024": {"races": [], "classes": [], "backgrounds": [], "spells": [spell]}}
+        with open(server.GAME_DATA_PATH, "w") as f:
+            json.dump(game_data, f)
+        server._game_data_cache = None
+
+        spells = client.get("/api/game-data?edition=2024").get_json()["spells"]
+        assert len(spells) == 1
+        s = spells[0]
+        assert s["name"] == "Fireball"
+        assert s["level"] == 3
+        assert s["school"] == "Evocation"
+        assert s["casting_time"] == "1 action"
+        assert s["range"] == "150 feet"
+        assert s["components"] == "VSM"
+        assert s["duration"] == "Instantaneous"
+        assert s["concentration"] is False
+        assert s["ritual"] is False
+
+    def test_spells_include_concentration_and_ritual_flags(self, client):
+        spells = [
+            {"name": "Bless", "level": 1, "school": "Enchantment",
+             "casting_time": "1 action", "range": "30 feet",
+             "components": "VSM", "duration": "1 minute",
+             "concentration": True, "ritual": False, "classes": [], "desc": ""},
+            {"name": "Detect Magic", "level": 1, "school": "Divination",
+             "casting_time": "1 action", "range": "Self",
+             "components": "VS", "duration": "10 minutes",
+             "concentration": True, "ritual": True, "classes": [], "desc": ""},
+        ]
+        game_data = {"2024": {"races": [], "classes": [], "backgrounds": [], "spells": spells}}
+        with open(server.GAME_DATA_PATH, "w") as f:
+            json.dump(game_data, f)
+        server._game_data_cache = None
+
+        result = client.get("/api/game-data?edition=2024").get_json()["spells"]
+        bless = next(s for s in result if s["name"] == "Bless")
+        detect = next(s for s in result if s["name"] == "Detect Magic")
+        assert bless["concentration"] is True
+        assert bless["ritual"] is False
+        assert detect["concentration"] is True
+        assert detect["ritual"] is True
+
+    def test_spells_list_has_expected_count(self, client):
+        spells = [
+            {"name": f"Spell {i}", "level": i % 10, "school": "Evocation",
+             "casting_time": "1 action", "range": "30 feet",
+             "components": "V", "duration": "Instantaneous",
+             "concentration": False, "ritual": False, "classes": [], "desc": ""}
+            for i in range(5)
+        ]
+        game_data = {"2024": {"races": [], "classes": [], "backgrounds": [], "spells": spells}}
+        with open(server.GAME_DATA_PATH, "w") as f:
+            json.dump(game_data, f)
+        server._game_data_cache = None
+
+        result = client.get("/api/game-data?edition=2024").get_json()["spells"]
+        assert len(result) == 5
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CHARACTER SPELLS
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCharacterSpells:
+    def test_save_spell_with_full_fields(self, client):
+        r = create_char(client, "Gandalf")
+        char_id = r.get_json()["id"]
+        spell = {
+            "name": "Fireball", "level": 3, "school": "Evocation",
+            "casting_time": "1 action", "range": "150 feet",
+            "components": "VSM", "duration": "Instantaneous",
+            "concentration": False, "ritual": False, "prepared": True,
+        }
+        client.put(f"/api/characters/{char_id}", json={"spells": [spell]})
+        saved = client.get(f"/api/characters/{char_id}").get_json()
+        s = saved["spells"][0]
+        assert s["name"] == "Fireball"
+        assert s["components"] == "VSM"
+        assert s["duration"] == "Instantaneous"
+        assert s["concentration"] is False
+        assert s["ritual"] is False
+        assert s["prepared"] is True
+
+    def test_save_concentration_spell(self, client):
+        r = create_char(client, "Merlin")
+        char_id = r.get_json()["id"]
+        spell = {
+            "name": "Bless", "level": 1, "school": "Enchantment",
+            "casting_time": "1 action", "range": "30 feet",
+            "components": "VSM", "duration": "1 minute",
+            "concentration": True, "ritual": False, "prepared": False,
+        }
+        client.put(f"/api/characters/{char_id}", json={"spells": [spell]})
+        saved = client.get(f"/api/characters/{char_id}").get_json()
+        assert saved["spells"][0]["concentration"] is True
+
+    def test_save_ritual_spell(self, client):
+        r = create_char(client, "Elminster")
+        char_id = r.get_json()["id"]
+        spell = {
+            "name": "Detect Magic", "level": 1, "school": "Divination",
+            "casting_time": "1 action", "range": "Self",
+            "components": "VS", "duration": "10 minutes",
+            "concentration": True, "ritual": True, "prepared": False,
+        }
+        client.put(f"/api/characters/{char_id}", json={"spells": [spell]})
+        saved = client.get(f"/api/characters/{char_id}").get_json()
+        assert saved["spells"][0]["ritual"] is True
+
+    def test_save_multiple_spells(self, client):
+        r = create_char(client, "Alustriel")
+        char_id = r.get_json()["id"]
+        spells = [
+            {"name": "Fireball", "level": 3, "school": "Evocation",
+             "casting_time": "1 action", "range": "150 feet",
+             "components": "VSM", "duration": "Instantaneous",
+             "concentration": False, "ritual": False, "prepared": True},
+            {"name": "Mage Armor", "level": 1, "school": "Abjuration",
+             "casting_time": "1 action", "range": "Touch",
+             "components": "VSM", "duration": "8 hours",
+             "concentration": False, "ritual": False, "prepared": True},
+        ]
+        client.put(f"/api/characters/{char_id}", json={"spells": spells})
+        saved = client.get(f"/api/characters/{char_id}").get_json()
+        names = {s["name"] for s in saved["spells"]}
+        assert names == {"Fireball", "Mage Armor"}
+
+    def test_spell_prepared_toggle_persists(self, client):
+        r = create_char(client, "Vex")
+        char_id = r.get_json()["id"]
+        spell = {
+            "name": "Magic Missile", "level": 1, "school": "Evocation",
+            "casting_time": "1 action", "range": "120 feet",
+            "components": "VS", "duration": "Instantaneous",
+            "concentration": False, "ritual": False, "prepared": False,
+        }
+        client.put(f"/api/characters/{char_id}", json={"spells": [spell]})
+        spell["prepared"] = True
+        client.put(f"/api/characters/{char_id}", json={"spells": [spell]})
+        saved = client.get(f"/api/characters/{char_id}").get_json()
+        assert saved["spells"][0]["prepared"] is True
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CHARACTER MIGRATION
