@@ -182,6 +182,9 @@ body {
 .attacks-table td input{background:transparent;border:none;color:var(--ink);font-family:'Crimson Text',serif;font-size:.9rem;width:100%;outline:none;padding:2px 0;}
 .attacks-table td input::placeholder{color:var(--text-d);opacity:.5;}
 .attacks-table .atk-del{background:none;border:none;color:var(--text-d);cursor:pointer;font-size:.9rem;padding:2px 4px;}
+.atk-roll-btn{background:none;border:1px solid var(--border-g);border-radius:3px;color:var(--gold-d);cursor:pointer;font-family:'Cinzel',serif;font-size:.55rem;font-weight:600;letter-spacing:.06em;padding:3px 5px;white-space:nowrap;display:block;width:100%;margin-bottom:2px;text-align:center;}
+.atk-roll-btn:last-child{margin-bottom:0;}
+.atk-roll-btn:active{background:rgba(201,168,76,.15);}
 /* ── SPELL STATS ── */
 .spell-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
 .spell-stat-box{background:var(--bg2);border:1px solid var(--border-g);border-radius:4px;padding:8px;text-align:center;}
@@ -302,6 +305,33 @@ input[type=number]{-moz-appearance:textfield;}
 .rules-pill.blue{background:rgba(26,42,74,.3);border-color:var(--blue-b);color:#a8c8e8;}
 .rules-pill.green{background:rgba(26,74,42,.3);border-color:var(--green-b);color:#88d8a0;}
 .rules-pill.purple{background:rgba(74,26,106,.3);border-color:var(--purple-b);color:#c8a8e8;}
+/* ── HOUSE RULES ── */
+.house-rule-entry{background:var(--bg2);border:1px solid var(--border-g);border-radius:4px;padding:10px 12px;margin-bottom:6px;}
+.house-rule-title{font-family:'Cinzel',serif;font-size:.8rem;font-weight:600;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.house-rule-desc{font-size:.85rem;color:var(--text-d);line-height:1.5;white-space:pre-wrap;}
+.house-rule-del{background:none;border:none;color:var(--red-b);font-size:.9rem;cursor:pointer;padding:0 4px;opacity:.6;flex-shrink:0;}
+.house-rule-del:hover{opacity:1;}
+.house-rule-edit{background:none;border:none;color:var(--gold-d);font-size:.9rem;cursor:pointer;padding:0 4px;opacity:.6;flex-shrink:0;}
+.house-rule-edit:hover{opacity:1;}
+.house-rule-confirm-del{background:none;border:none;color:var(--red-b);font-size:.75rem;font-family:'Cinzel',serif;cursor:pointer;padding:2px 6px;border:1px solid var(--red-b);border-radius:3px;flex-shrink:0;}
+.house-rule-cancel-del{background:none;border:none;color:var(--text-d);font-size:.75rem;font-family:'Cinzel',serif;cursor:pointer;padding:2px 6px;border:1px solid var(--border-g);border-radius:3px;flex-shrink:0;}
+.house-rule-edit-form{padding:4px 0;}
+.house-rule-edit-form textarea{width:100%;background:transparent;border:1px solid var(--border-g);border-radius:3px;color:var(--ink);font-family:'Crimson Text',serif;font-size:1rem;padding:6px 8px;outline:none;resize:vertical;min-height:80px;margin-top:6px;}
+.house-rule-edit-form textarea:focus{border-color:var(--gold);}
+.house-rule-edit-form select{background:var(--bg2);}
+.house-rule-edit-form select option{background:var(--bg2);color:var(--ink);}
+.house-rule-edit-btns{display:flex;gap:8px;margin-top:8px;}
+.add-rule-form{background:var(--bg2);border:1px solid var(--border-g);border-radius:4px;padding:14px;margin-bottom:4px;}
+.add-rule-form .field-group{margin-bottom:10px;}
+.add-rule-form textarea{width:100%;background:transparent;border:1px solid var(--border-g);border-radius:3px;color:var(--ink);font-family:'Crimson Text',serif;font-size:1rem;padding:6px 8px;outline:none;resize:vertical;min-height:80px;}
+.add-rule-form textarea:focus{border-color:var(--gold);}
+.add-rule-form select{background:var(--bg2);}
+.add-rule-form select option{background:var(--bg2);color:var(--ink);}
+/* ── SUBTABS ── */
+.subtab-bar{display:flex;border-bottom:1px solid var(--border-g);margin-bottom:16px;}
+.subtab-btn{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-d);font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:10px 4px;cursor:pointer;transition:color .15s,border-color .15s;}
+.subtab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.subtab-panel{display:none}.subtab-panel.active{display:block}
 .rules-ability-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;}
 .rules-ability-card{background:var(--bg);border:1px solid var(--border-g);border-radius:4px;padding:10px;}
 .rules-ability-card .rac-name{font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
@@ -727,6 +757,14 @@ input[type=number]{-moz-appearance:textfield;}
         </div>
       </div>
 
+      <!-- Party Roll Log -->
+      <div class="section-title" style="margin-top:14px;">Party Roll Log <span id="party-log-status" style="font-family:'Crimson Text',serif;font-size:.7rem;color:var(--text-d);text-transform:none;letter-spacing:0;font-weight:400;margin-left:6px;">● connecting…</span></div>
+      <div style="background:var(--bg2);border:1px solid var(--border-g);border-radius:4px;overflow:hidden;">
+        <div class="dice-roll-history" id="party-roll-log">
+          <div style="color:var(--text-d);font-size:.8rem;font-style:italic;padding:12px;text-align:center;">No party rolls yet.</div>
+        </div>
+      </div>
+
     </div><!-- /tab-dice -->
 
     <!-- ── TAB: STATS ── -->
@@ -780,7 +818,7 @@ input[type=number]{-moz-appearance:textfield;}
     <div id="tab-inventory" class="tab-content">
       <div class="section-title">Attacks &amp; Spellcasting</div>
       <table class="attacks-table">
-        <thead><tr><th>Name</th><th>ATK Bonus</th><th>Damage / Type</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>ATK Bonus</th><th>Damage / Type</th><th>Roll</th><th></th></tr></thead>
         <tbody id="attacks-tbody"></tbody>
       </table>
       <button class="add-btn" onclick="addAttack()" style="margin-bottom:14px;">+ Add Attack</button>
@@ -829,6 +867,13 @@ input[type=number]{-moz-appearance:textfield;}
 
     <!-- ── TAB: RULES ── -->
     <div id="tab-rules" class="tab-content">
+
+      <div class="subtab-bar">
+        <button class="subtab-btn active" id="subtab-btn-reference" onclick="switchSubtab('reference',this)">Reference</button>
+        <button class="subtab-btn" id="subtab-btn-homebrew" onclick="switchSubtab('homebrew',this)">Homebrew Rules</button>
+      </div>
+
+      <div id="subtab-reference" class="subtab-panel active">
 
       <div class="section-title">Out of Combat</div>
 
@@ -988,6 +1033,42 @@ input[type=number]{-moz-appearance:textfield;}
           </div>
         </details>
       </div>
+
+      </div><!-- /subtab-reference -->
+
+      <div id="subtab-homebrew" class="subtab-panel">
+
+        <div class="section-title">Add New Rule</div>
+        <div class="add-rule-form">
+          <div class="field-group">
+            <label>Title</label>
+            <input type="text" id="new-rule-title" placeholder="e.g. Flanking grants advantage">
+          </div>
+          <div class="field-group">
+            <label>Category</label>
+            <select id="new-rule-category">
+              <option value="General">General</option>
+              <option value="Combat">Combat</option>
+              <option value="Magic">Magic</option>
+              <option value="Skills">Skills</option>
+              <option value="Exploration">Exploration</option>
+              <option value="Character Creation">Character Creation</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Description</label>
+            <textarea id="new-rule-desc" placeholder="Describe the homebrew rule…"></textarea>
+          </div>
+          <button class="confirm-btn" onclick="addHouseRule()" style="margin-top:4px;">+ Add Rule</button>
+        </div>
+
+        <div class="section-title">Homebrew Rules</div>
+        <div id="house-rules-list">
+          <div style="color:var(--text-d);font-size:.85rem;font-style:italic;text-align:center;padding:20px 0;">No homebrew rules yet.</div>
+        </div>
+
+      </div><!-- /subtab-homebrew -->
 
     </div><!-- /tab-rules -->
 
@@ -1807,6 +1888,14 @@ function switchTab(name,btn){
   if(name==='dice') populateDiceSelectors();
 }
 
+function switchSubtab(name, btn) {
+  document.querySelectorAll('.subtab-panel').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.subtab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('subtab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'homebrew') loadHouseRules();
+}
+
 // ══════════════════════════════════════════════════════════════════
 // ATTACKS & SPELLCASTING TABLE
 // ══════════════════════════════════════════════════════════════════
@@ -1816,7 +1905,7 @@ function renderAttacks(){
   const tbody=document.getElementById('attacks-tbody');
   if(!tbody) return;
   if(!attacks.length){
-    tbody.innerHTML=`<tr><td colspan="4" style="color:var(--text-d);font-size:.8rem;padding:8px 6px;font-style:italic;">No attacks added yet.</td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="5" style="color:var(--text-d);font-size:.8rem;padding:8px 6px;font-style:italic;">No attacks added yet.</td></tr>`;
     return;
   }
   tbody.innerHTML=attacks.map((atk,i)=>`
@@ -1824,6 +1913,10 @@ function renderAttacks(){
       <td><input type="text" value="${atk.name||''}" placeholder="Longsword" oninput="updateAttack(${i},'name',this.value)"></td>
       <td><input type="text" value="${atk.atk_bonus||''}" placeholder="+5" oninput="updateAttack(${i},'atk_bonus',this.value)" style="width:60px;"></td>
       <td><input type="text" value="${atk.damage||''}" placeholder="1d8+3 slashing" oninput="updateAttack(${i},'damage',this.value)"></td>
+      <td style="width:44px;">
+        <button class="atk-roll-btn" onclick="rollAttack(${i})">🎲 ATK</button>
+        <button class="atk-roll-btn" onclick="rollDamage(${i})">💥 DMG</button>
+      </td>
       <td><button class="atk-del" onclick="removeAttack(${i})">✕</button></td>
     </tr>`).join('');
 }
@@ -1843,6 +1936,79 @@ function removeAttack(idx){
   currentChar.attacks.splice(idx,1);
   renderAttacks();
   scheduleSave();
+}
+
+function _pushDiceResult(label, partsData, total, isCrit, isFail) {
+  const resultEl = document.getElementById('dice-tab-result');
+  resultEl.textContent = total;
+  resultEl.style.color = isCrit ? '#ffd700' : isFail ? 'var(--red-b)' : 'var(--gold)';
+  resultEl.classList.remove('dice-rolling');
+  void resultEl.offsetWidth;
+  resultEl.classList.add('dice-rolling');
+  const critFumble = isCrit ? 'crit' : isFail ? 'fumble' : '';
+  document.getElementById('dice-tab-breakdown').innerHTML = buildBreakdownHTML(partsData, '', critFumble, '.8rem');
+  diceState.history.unshift({total, label, partsData, tookDropped: '', isCrit, isFail});
+  if (diceState.history.length > 20) diceState.history.pop();
+  renderDiceHistory();
+  // Broadcast to party roll log
+  fetch('/api/rolls', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      character: currentChar?.name || 'Unknown',
+      label, total, isCrit, isFail,
+      parts: partsData.map(p => p.text)
+    })
+  }).catch(() => {});
+}
+
+function showRollPopup(label, partsData, total, isCrit, isFail) {
+  document.getElementById('roll-popup-label').textContent = label;
+  const totalEl = document.getElementById('roll-popup-total');
+  totalEl.textContent = total;
+  totalEl.style.color = isCrit ? '#ffd700' : isFail ? 'var(--red-b)' : 'var(--gold)';
+  totalEl.classList.remove('dice-rolling');
+  void totalEl.offsetWidth;
+  totalEl.classList.add('dice-rolling');
+  const critFumble = isCrit ? 'crit' : isFail ? 'fumble' : '';
+  document.getElementById('roll-popup-breakdown').innerHTML = buildBreakdownHTML(partsData, '', critFumble, '.85rem');
+  document.getElementById('modal-roll-result').classList.add('open');
+}
+
+function rollAttack(idx) {
+  const atk = currentChar.attacks?.[idx];
+  if (!atk) return;
+  const bonus = parseInt(atk.atk_bonus) || 0;
+  const roll = Math.floor(Math.random() * 20) + 1;
+  const total = roll + bonus;
+  const isCrit = roll === 20, isFail = roll === 1;
+  const partsData = [{text: `d20 ${roll}`, type: 'die'}];
+  if (bonus !== 0) partsData.push({text: `ATK ${fmtMod(bonus)}`, type: 'ability'});
+  const label = (atk.name || 'Attack') + ' — To Hit';
+  _pushDiceResult(label, partsData, total, isCrit, isFail);
+  showRollPopup(label, partsData, total, isCrit, isFail);
+}
+
+function rollDamage(idx) {
+  const atk = currentChar.attacks?.[idx];
+  if (!atk || !atk.damage) return;
+  // Strip trailing damage type words e.g. "1d8+3 slashing" -> "1d8+3"
+  const dmgStr = atk.damage.replace(/[a-zA-Z\s]+$/, '').trim();
+  const {tray, flatBonus} = parseDiceFormula(dmgStr);
+  if (!tray.length && flatBonus === 0) return;
+  let total = 0;
+  const partsData = [];
+  for (const {count, sides} of tray) {
+    const rolls = Array.from({length: count}, () => Math.floor(Math.random() * sides) + 1);
+    const sum = rolls.reduce((a, b) => a + b, 0);
+    total += sum;
+    const rollStr = rolls.length > 1 ? `[${rolls.join(', ')}]` : String(rolls[0]);
+    partsData.push({text: `${count}d${sides} ${rollStr}`, type: 'die'});
+  }
+  if (flatBonus !== 0) { total += flatBonus; partsData.push({text: `+${flatBonus}`, type: 'bonus'}); }
+  const label = (atk.name || 'Attack') + ' — Damage';
+  _pushDiceResult(label, partsData, total, false, false);
+  showRollPopup(label, partsData, total, false, false);
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -2517,6 +2683,48 @@ function renderDiceHistory() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// PARTY ROLL LOG (SSE)
+// ══════════════════════════════════════════════════════════════════
+const partyLog = [];
+
+function connectPartyRollLog() {
+  const statusEl = document.getElementById('party-log-status');
+  const es = new EventSource('/api/rolls/stream');
+  es.onopen = () => { if (statusEl) statusEl.textContent = '● live'; statusEl.style.color = 'var(--green-b)'; };
+  es.onerror = () => { if (statusEl) { statusEl.textContent = '● disconnected'; statusEl.style.color = 'var(--red-b)'; } };
+  es.onmessage = (e) => {
+    try {
+      const roll = JSON.parse(e.data);
+      partyLog.unshift(roll);
+      if (partyLog.length > 50) partyLog.pop();
+      renderPartyLog();
+    } catch (_) {}
+  };
+}
+
+function renderPartyLog() {
+  const el = document.getElementById('party-roll-log');
+  if (!el) return;
+  if (!partyLog.length) {
+    el.innerHTML = '<div style="color:var(--text-d);font-size:.8rem;font-style:italic;padding:12px;text-align:center;">No party rolls yet.</div>';
+    return;
+  }
+  el.innerHTML = partyLog.map(r => {
+    const totalCls = r.isCrit ? 'roll-hist-crit' : r.isFail ? 'roll-hist-fail' : '';
+    const parts = (r.parts || []).join(' + ');
+    return `<div class="roll-hist-entry" style="flex-direction:column;align-items:flex-start;gap:2px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+        <span class="roll-hist-label" style="color:var(--text-d);">${r.character} · ${r.label}</span>
+        <span class="roll-hist-total ${totalCls}">${r.total}</span>
+      </div>
+      <div style="font-size:.7rem;color:var(--text-d);font-style:italic;">${parts}</div>
+    </div>`;
+  }).join('');
+}
+
+connectPartyRollLog();
+
+// ══════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════
 loadCharList();
@@ -2656,6 +2864,160 @@ loadCharList();
     <button class="cancel-btn" onclick="closeModal('modal-sanctuary')">Cancel</button>
   </div>
 </div>
+
+<!-- Roll Result Popup -->
+<div class="modal-overlay" id="modal-roll-result" style="align-items:center;" onclick="closeModal('modal-roll-result')">
+  <div onclick="event.stopPropagation()" style="background:var(--bg2);border:1px solid var(--border-g);border-top:2px solid var(--gold-d);border-radius:8px;width:90%;max-width:340px;padding:24px 20px 20px;text-align:center;">
+    <div id="roll-popup-label" style="font-family:'Cinzel',serif;font-size:.7rem;color:var(--gold-d);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;"></div>
+    <div id="roll-popup-total" class="dice-tab-result" style="font-size:5rem;line-height:1;margin-bottom:8px;"></div>
+    <div id="roll-popup-breakdown" class="dice-tab-breakdown" style="margin-bottom:4px;"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// HOUSE RULES
+// ══════════════════════════════════════════════════════════════════
+let houseRules = [];
+let houseRulesEditingId = null;
+const houseRulesConfirmDelete = new Set();
+
+async function loadHouseRules() {
+  try {
+    const res = await fetch('/api/house-rules');
+    houseRules = await res.json();
+    renderHouseRules();
+  } catch(e) { console.error('Failed to load house rules', e); }
+}
+
+function renderHouseRules() {
+  const el = document.getElementById('house-rules-list');
+  if (!el) return;
+  if (!houseRules.length) {
+    el.innerHTML = '<div style="color:var(--text-d);font-size:.85rem;font-style:italic;text-align:center;padding:20px 0;">No house rules yet.</div>';
+    return;
+  }
+  const byCategory = {};
+  houseRules.forEach(r => {
+    const cat = r.category || 'General';
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(r);
+  });
+  const cats = ['General','Combat','Magic','Skills','Exploration','Character Creation','Other'];
+  const sorted = Object.entries(byCategory).sort(([a],[b]) => cats.indexOf(a) - cats.indexOf(b));
+  el.innerHTML = sorted.map(([cat, rules]) => `
+    <div class="section-title">${escHtml(cat)}</div>
+    ${rules.map(r => `
+      <div class="house-rule-entry">
+        ${houseRulesEditingId === r.id ? renderRuleEditForm(r) : `
+          <div class="house-rule-title">
+            <span>${escHtml(r.title)}</span>
+            <div style="display:flex;gap:2px;align-items:center;flex-shrink:0;">
+              <button class="house-rule-edit" onclick="startEditRule('${escHtml(r.id)}')" title="Edit">✎</button>
+              ${houseRulesConfirmDelete.has(r.id) ? `
+                <button class="house-rule-confirm-del" onclick="deleteHouseRule('${escHtml(r.id)}')">Delete?</button>
+                <button class="house-rule-cancel-del" onclick="cancelDeleteRule('${escHtml(r.id)}')">Cancel</button>
+              ` : `
+                <button class="house-rule-del" onclick="startDeleteRule('${escHtml(r.id)}')" title="Delete">✕</button>
+              `}
+            </div>
+          </div>
+          <div class="house-rule-desc">${escHtml(r.description)}</div>
+        `}
+      </div>
+    `).join('')}
+  `).join('');
+}
+
+function renderRuleEditForm(r) {
+  const cats = ['General','Combat','Magic','Skills','Exploration','Character Creation','Other'];
+  return `
+    <div class="house-rule-edit-form">
+      <div class="field-group">
+        <label>Title</label>
+        <input type="text" id="edit-rule-title" value="${escHtml(r.title)}">
+      </div>
+      <div class="field-group" style="margin-top:8px;">
+        <label>Category</label>
+        <select id="edit-rule-category">
+          ${cats.map(c => `<option value="${c}"${c===r.category?' selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <textarea id="edit-rule-desc">${escHtml(r.description)}</textarea>
+      <div class="house-rule-edit-btns">
+        <button class="confirm-btn" onclick="saveEditRule('${escHtml(r.id)}')" style="margin-top:0;">Save</button>
+        <button class="cancel-btn" onclick="cancelEditRule()" style="margin-top:0;">Cancel</button>
+      </div>
+    </div>
+  `;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function startDeleteRule(id) {
+  houseRulesConfirmDelete.add(id);
+  renderHouseRules();
+}
+
+function cancelDeleteRule(id) {
+  houseRulesConfirmDelete.delete(id);
+  renderHouseRules();
+}
+
+function startEditRule(id) {
+  houseRulesEditingId = id;
+  houseRulesConfirmDelete.clear();
+  renderHouseRules();
+}
+
+function cancelEditRule() {
+  houseRulesEditingId = null;
+  renderHouseRules();
+}
+
+async function saveEditRule(id) {
+  const title = document.getElementById('edit-rule-title').value.trim();
+  const category = document.getElementById('edit-rule-category').value;
+  const description = document.getElementById('edit-rule-desc').value.trim();
+  if (!title || !description) return;
+  try {
+    await fetch('/api/house-rules/' + encodeURIComponent(id), {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, category, description})
+    });
+    houseRulesEditingId = null;
+    await loadHouseRules();
+  } catch(e) { console.error('Failed to update house rule', e); }
+}
+
+async function addHouseRule() {
+  const title = document.getElementById('new-rule-title').value.trim();
+  const category = document.getElementById('new-rule-category').value;
+  const description = document.getElementById('new-rule-desc').value.trim();
+  if (!title || !description) return;
+  try {
+    await fetch('/api/house-rules', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, category, description})
+    });
+    document.getElementById('new-rule-title').value = '';
+    document.getElementById('new-rule-desc').value = '';
+    await loadHouseRules();
+  } catch(e) { console.error('Failed to add house rule', e); }
+}
+
+async function deleteHouseRule(id) {
+  houseRulesConfirmDelete.delete(id);
+  try {
+    await fetch('/api/house-rules/' + encodeURIComponent(id), {method: 'DELETE'});
+    await loadHouseRules();
+  } catch(e) { console.error('Failed to delete house rule', e); }
+}
+</script>
 
 </body>
 </html>
